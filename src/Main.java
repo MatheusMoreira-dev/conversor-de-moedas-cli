@@ -25,6 +25,7 @@ public class Main {
         String json = response.body();
         Gson gson = new Gson();
 
+        System.out.println("TESTE");
         System.out.println(json);
     }
 }
