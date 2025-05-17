@@ -1,31 +1,65 @@
-import com.google.gson.*;
+import br.com.conversor.api.Request;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        String key = "b052d0d2625f2771aa54860f";
-        String url = "https://v6.exchangerate-api.com/v6/%s/latest/USD".formatted(key);
+        final String key =  "b052d0d2625f2771aa54860f";
 
-        //Cliente
-        HttpClient client = HttpClient.newHttpClient();
+        Map<String,String> allowed = new LinkedHashMap<>(){{
+           put("USD", "Dólar americano");
+           put("BRL", "Brasil");
+           put("EUR","Euro");
+           put("ARS","Peso Argentino");
+           put("BOB","Boliviano");
+           put("CLP","Peso chileno");
+           put("COP","Peso colombiano");
+        }};
 
-        //Requisição
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url)).build();
+        String base, target, value;
+        Scanner input = new Scanner(System.in);
 
-        //Resposta
-        HttpResponse<String> response = client.
-                send(request, HttpResponse.BodyHandlers.ofString());
-        //Resposta Json
-        String json = response.body();
-        Gson gson = new Gson();
+        byte opcao = 1;
+        while (opcao == 1){
+            System.out.println("""
+                    
+                    Conversão de Moedas
+                    
+                    1 - Iniciar
+                    0 - Sair
+                    
+                    """);
+            opcao = input.nextByte();
+            if(opcao == 0){
+                break;
+            }
 
-        System.out.println("TESTE");
-        System.out.println(json);
+            System.out.println("Moedas aceitas:");
+            System.out.println("--------------------------");
+
+            for (Map.Entry<String, String> pair : allowed.entrySet()) {
+                System.out.println(pair.getKey() + " - " + pair.getValue());
+            }
+
+            System.out.println("--------------------------");
+            System.out.println("Digite a sigla: ");
+
+            System.out.print("De: ");
+            base = input.next();
+
+            System.out.print("Para: ");
+            target = input.next();
+
+            System.out.print("Montante: ");
+            value = input.next();
+
+            if(allowed.containsKey(base) && allowed.containsKey(target)){
+                Request request = new Request(key,base,target,value);
+                System.out.println("\n" + request.getconversion());
+            } else{
+                System.out.println("\nEntradas inválidas !");
+            }
+        }
     }
 }
