@@ -5,7 +5,9 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
-        final String key =  "b052d0d2625f2771aa54860f";
+
+        // Coloque aqui sua APIKEY
+        final String key =  "SUA_API_KEY";
 
         Map<String,String> allowed = new LinkedHashMap<>(){{
            put("USD", "Dólar americano");
